@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Diagnostics;
 
-namespace SharpMiner
+namespace DotNetStratumMiner
 {
     class Stratum
     {

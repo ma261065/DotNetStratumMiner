@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpMiner", "SharpMiner.csproj", "{A474F5E9-D65F-47A5-A7C6-7A194B538727}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetStratumMiner", "DotNetStratumMiner.csproj", "{A474F5E9-D65F-47A5-A7C6-7A194B538727}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

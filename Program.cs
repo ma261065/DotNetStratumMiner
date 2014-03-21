@@ -9,7 +9,7 @@ using System.Text;
 using System.Collections;
 
 [assembly: AssemblyVersionAttribute("1.0.0.0")]
-namespace SharpMiner
+namespace DotNetStratumMiner
 {
     class Program
     {

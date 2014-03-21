@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Threading;
 using System.Diagnostics;
 
-namespace SharpMiner
+namespace DotNetStratumMiner
 {
     class Miner
     {

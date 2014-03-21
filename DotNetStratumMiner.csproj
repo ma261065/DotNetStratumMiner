@@ -8,7 +8,7 @@
     <ProjectGuid>{A474F5E9-D65F-47A5-A7C6-7A194B538727}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SharpMiner</RootNamespace>
+    <RootNamespace>DotNetStratumMiner</RootNamespace>
     <AssemblyName>SharpMiner</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

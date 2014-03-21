@@ -5,7 +5,7 @@ using System.Runtime.Serialization.Json;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace SharpMiner
+namespace DotNetStratumMiner
 {
     public static class Utilities
     {
