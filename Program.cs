@@ -38,7 +38,7 @@ namespace DotNetStratumMiner
             CommandOptions = CommandOptions.Replace("-o ", "-o").Replace("-u ", "-u").Replace("-p ", "-p");
             string[] Options = CommandOptions.Split(' ');
 
-            if (Options.Length == 0 || Options[0] == "-h")
+            if (CommandOptions.Length == 0 || Options[0] == "-h")
             {
                 Console.WriteLine("-o URL         URL of mining server (e.g. http://megahash.wemineltc.com:3333)");
                 Console.WriteLine("-u USERNAME    Username for mining server");
