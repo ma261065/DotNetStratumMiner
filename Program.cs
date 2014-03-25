@@ -20,10 +20,10 @@ namespace DotNetStratumMiner
         private static BackgroundWorker worker;
         private static int SharesSubmitted = 0;
         private static int SharesAccepted = 0;
-        private static string Server = "freedom.wemineltc.com"; //"stratum.wemineftc.com";
-        private static int Port = 3339; //4444
-        private static string Username = "bigred.mgpu";
-        private static string Password = "x";
+        private static string Server = ""; // = "freedom.wemineltc.com"; //"stratum.wemineftc.com";
+        private static int Port = 0; // = 3339; //4444
+        private static string Username = ""; // = "bigred.mgpu";
+        private static string Password = ""; // = "x";
 
         private static System.Timers.Timer KeepaliveTimer;
         
@@ -34,6 +34,76 @@ namespace DotNetStratumMiner
 
         static void Main(string[] args)
         {
+            if (args.Length == 0 || args[0] == "-h")
+            {
+                Console.WriteLine("-o URL         URL of mining server (e.g. http://megahash.wemineltc.com:3333)");
+                Console.WriteLine("-u USERNAME    Username for mining server");
+                Console.WriteLine("-p PASSWORD    Password for mining server");
+                Console.WriteLine("-h             Display this help text and exit");
+                Environment.Exit(-1);
+            }
+
+            //foreach (string arg in args)
+            //{
+            //    if (!arg.Contains("-"))
+            //    {
+            //        args
+            //    }
+            //}
+
+            foreach (string arg in args)
+            {
+                switch(arg.Substring(0, 2))
+                {
+                    case "-o":
+                        if (!arg.Contains(":"))
+                        {
+                            Console.WriteLine("Missing port. URL should be in format like http://megahash.wemineltc.com:3333");
+                            Environment.Exit(-1);
+                        }
+                        Server = arg.Split(':')[0].Replace("-o", "").Replace("http://", "").Replace("tcp://", "").Trim();
+                        Port = Convert.ToInt16(arg.Split(':')[1]);
+                    break;
+                    
+                    case "-u":
+                        Username = arg.Replace("-u", "").Trim();
+                    break;
+                    
+                    case "-p":
+                        Password = arg.Replace("-p", "").Trim();
+                    break;
+                    
+                    default:
+                        Console.WriteLine("Illegal argument {0}", arg);
+                        Environment.Exit(-1);
+                    break;
+                }
+            }
+
+            if (Server == "")
+            {
+                Console.WriteLine("Missing Server URL");
+                Environment.Exit(-1);
+            }
+            else if (Port == 0)
+            {
+                Console.WriteLine("Missing Server Port");
+                Environment.Exit(-1);
+            }
+            else if (Username == "")
+            {
+                Console.WriteLine("Missing username");
+                Environment.Exit(-1);
+            }
+            else if (Password == "")
+            {
+                Console.WriteLine("Missing password");
+                Environment.Exit(-1);
+            }
+
+            Console.WriteLine("Connecting miner to {0} on port {1} with username '{2}' and password '{3}'", Server, Port, Username, Password);
+            Console.WriteLine();
+
             CoinMiner = new Miner();
             stratum = new Stratum();
 

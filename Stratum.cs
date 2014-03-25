@@ -48,6 +48,14 @@ namespace DotNetStratumMiner
 
         private void ConnectCallback(IAsyncResult result)
         {
+            if (tcpClient.Connected)
+                Console.WriteLine("Connected");
+            else
+            {
+                Console.WriteLine("Unable to connect to server {0} on port {1}", Server, Port);
+                Environment.Exit(-1);
+            }
+
             // We are connected successfully
             try
             {
