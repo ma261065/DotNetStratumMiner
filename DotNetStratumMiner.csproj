@@ -95,7 +95,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="bin\Debug\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
