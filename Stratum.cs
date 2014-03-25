@@ -129,6 +129,38 @@ namespace DotNetStratumMiner
             Console.WriteLine("Sent mining.authorize");
         }
 
+        public void SendSUBMIT(string JobID, string nTime, string Nonce, int Difficulty)
+        {
+            StratumCommand Command = new StratumCommand();
+            Command.id = ID++;
+            Command.method = "mining.submit";
+            Command.parameters = new ArrayList();
+            Command.parameters.Add(Username);
+            Command.parameters.Add(JobID);
+            Command.parameters.Add(ExtraNonce2.ToString("x8"));
+            Command.parameters.Add(nTime);
+            Command.parameters.Add(Nonce);
+
+            string SubmitString = Utilities.JsonSerialize(Command) + "\n";
+
+            Byte[] bytesSent = Encoding.ASCII.GetBytes(SubmitString);
+
+            try
+            {
+                tcpClient.GetStream().Write(bytesSent, 0, bytesSent.Length);
+                PendingACKs.Add(Command.id, Command.method);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Socket error:" + ex.Message);
+                ConnectToServer(Server, Port, Username, Password);
+            }
+
+            SharesSubmitted++;
+            Console.WriteLine("{0} - Submit (Difficulty {1})", DateTime.Now, Difficulty);
+            Debug.WriteLine("[{0}] Submit (Difficulty {1}) : {2}", DateTime.Now, Difficulty, SubmitString);
+        }
+
         // Callback for Read operation
         private void ReadCallback(IAsyncResult result)
         {
@@ -215,38 +247,6 @@ namespace DotNetStratumMiner
 
             // Then start reading from the network again.
             networkStream.BeginRead(buffer, 0, buffer.Length, ReadCallback, buffer);
-        }
-
-        public void Submit(string JobID, string nTime, string Nonce, int Difficulty)
-        {
-            StratumCommand Command = new StratumCommand();
-            Command.id = ID++;
-            Command.method = "mining.submit";
-            Command.parameters = new ArrayList();
-            Command.parameters.Add(Username);
-            Command.parameters.Add(JobID);
-            Command.parameters.Add(ExtraNonce2.ToString("x8"));
-            Command.parameters.Add(nTime);
-            Command.parameters.Add(Nonce);
-
-            string SubmitString = Utilities.JsonSerialize(Command) + "\n";
-
-            Byte[] bytesSent = Encoding.ASCII.GetBytes(SubmitString);
-
-            try
-            {
-                tcpClient.GetStream().Write(bytesSent, 0, bytesSent.Length);
-                PendingACKs.Add(Command.id, Command.method);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Socket error:" + ex.Message);
-                ConnectToServer(Server, Port, Username, Password);
-            }
-
-            SharesSubmitted++;
-            Console.WriteLine("Submit (Difficulty {0})", Difficulty);
-            Debug.WriteLine("[{0}] Submit (Difficulty {1}) : {2}", DateTime.Now, Difficulty, SubmitString);
         }
     }
 

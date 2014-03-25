@@ -54,7 +54,7 @@ namespace DotNetStratumMiner
                     case "-o":
                         if (!arg.Contains(":"))
                         {
-                            Console.WriteLine("Missing port. URL should be in format like http://megahash.wemineltc.com:3333");
+                            Console.WriteLine("Missing server port. URL should be in the format of http://megahash.wemineltc.com:3333");
                             Environment.Exit(-1);
                         }
 
@@ -80,6 +80,9 @@ namespace DotNetStratumMiner
                     case "-p":
                         Password = arg.Replace("-p", "").Trim();
                     break;
+
+                    case "-h":
+                    break;
                     
                     default:
                         Console.WriteLine("Illegal argument {0}", arg);
@@ -90,12 +93,12 @@ namespace DotNetStratumMiner
 
             if (Server == "")
             {
-                Console.WriteLine("Missing Server URL");
+                Console.WriteLine("Missing server URL. URL should be in the format of http://megahash.wemineltc.com:3333");
                 Environment.Exit(-1);
             }
             else if (Port == 0)
             {
-                Console.WriteLine("Missing Server Port");
+                Console.WriteLine("Missing server port. URL should be in the format of http://megahash.wemineltc.com:3333");
                 Environment.Exit(-1);
             }
             else if (Username == "")
@@ -109,12 +112,13 @@ namespace DotNetStratumMiner
                 Environment.Exit(-1);
             }
 
-            Console.WriteLine("Connecting miner to {0} on port {1} with username '{2}' and password '{3}'", Server, Port, Username, Password);
+            Console.WriteLine("Connecting to '{0}' on port '{1}' with username '{2}' and password '{3}'", Server, Port, Username, Password);
             Console.WriteLine();
 
             CoinMiner = new Miner();
             stratum = new Stratum();
 
+            // Workaround for pools that keep disconnecting if no work is submitted in a certain time period. Send regular mining.authorize commands to keep the connection open
             KeepaliveTimer = new System.Timers.Timer(45000);
             KeepaliveTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
             KeepaliveTimer.Start();
@@ -130,7 +134,7 @@ namespace DotNetStratumMiner
             // Start mining!!
             StartCoinMiner();
 
-            // This thread waits forever as the mining happens on other threads
+            // This thread waits forever as the mining happens on other threads. Can press Ctrl+C to exit
             Thread.Sleep(System.Threading.Timeout.Infinite);
         }
 
@@ -140,6 +144,7 @@ namespace DotNetStratumMiner
             while (IncomingJobs.Count == 0)
                 Thread.Sleep(500);
 
+            // Get the job
             Job ThisJob = IncomingJobs.Dequeue();
 
             if (ThisJob.CleanJobs)
@@ -148,13 +153,15 @@ namespace DotNetStratumMiner
             // Increment ExtraNonce2
             stratum.ExtraNonce2++;
 
+            // Calculate MerkleRoot and Target
             string MerkleRoot = Utilities.GenerateMerkleRoot(ThisJob.Coinb1, ThisJob.Coinb2, stratum.ExtraNonce1, stratum.ExtraNonce2.ToString("x8"), ThisJob.MerkleNumbers);
             string Target = Utilities.GenerateTarget(CurrentDifficulty);
 
+            // Update the inputs on this job
             ThisJob.Target = Target;
             ThisJob.Data = ThisJob.Version + ThisJob.PreviousHash + MerkleRoot + ThisJob.NetworkTime + ThisJob.NetworkDifficulty;
 
-            // Start a new miner in the background
+            // Start a new miner in the background and pass it the job
             worker = new BackgroundWorker();
             worker.DoWork += new DoWorkEventHandler(CoinMiner.Mine);
             worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(CoinMinerCompleted);
@@ -163,13 +170,13 @@ namespace DotNetStratumMiner
 
         static void CoinMinerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            // If the mining threads returned a result, submit it
+            // If the miner returned a result, submit it
             if (e.Result != null)
             {
                 Job ThisJob = (Job)e.Result;
                 SharesSubmitted++;
 
-                stratum.Submit(ThisJob.JobID, ThisJob.Data.Substring(68 * 2, 8), ThisJob.Answer.ToString("x8"), CurrentDifficulty);
+                stratum.SendSUBMIT(ThisJob.JobID, ThisJob.Data.Substring(68 * 2, 8), ThisJob.Answer.ToString("x8"), CurrentDifficulty);
             }
 
             // Mine again
@@ -180,7 +187,7 @@ namespace DotNetStratumMiner
         {
             StratumResponse Response = (StratumResponse)e.MiningEventArg;
 
-            Console.Write("Got Response to " + (string)sender + " - ");
+            Console.Write("Got Response to {0} - " , (string)sender);
 
             switch ((string)sender)
             {
@@ -196,17 +203,17 @@ namespace DotNetStratumMiner
 
                 case "mining.subscribe":
                     stratum.ExtraNonce1 = (string)((object[])Response.result)[1];
-                    Console.WriteLine("ExtraNonce1 set to " + stratum.ExtraNonce1);
+                    Console.WriteLine("Subscribed. ExtraNonce1 set to " + stratum.ExtraNonce1);
                     break;
 
                 case "mining.submit":
                     if (Response.result != null && (bool)Response.result)
                     {
                         SharesAccepted++;
-                        Console.WriteLine("Share accepted (" + SharesAccepted + " of " + SharesSubmitted + ")");
+                        Console.WriteLine("Share accepted ({0} of {1})", SharesAccepted, SharesSubmitted);
                     }
                     else
-                        Console.WriteLine("Share rejected. " + Response.error[1]);
+                        Console.WriteLine("Share rejected. {0}", Response.error[1]);
                     break;
             }
         }
