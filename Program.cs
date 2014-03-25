@@ -34,7 +34,11 @@ namespace DotNetStratumMiner
 
         static void Main(string[] args)
         {
-            if (args.Length == 0 || args[0] == "-h")
+            string CommandOptions = Environment.CommandLine.Remove(0, Environment.CommandLine.IndexOf(".exe\" ") + 6);
+            CommandOptions = CommandOptions.Replace("-o ", "-o").Replace("-u ", "-u").Replace("-p ", "-p");
+            string[] Options = CommandOptions.Split(' ');
+
+            if (Options.Length == 0 || Options[0] == "-h")
             {
                 Console.WriteLine("-o URL         URL of mining server (e.g. http://megahash.wemineltc.com:3333)");
                 Console.WriteLine("-u USERNAME    Username for mining server");
@@ -43,15 +47,7 @@ namespace DotNetStratumMiner
                 Environment.Exit(-1);
             }
 
-            //foreach (string arg in args)
-            //{
-            //    if (!arg.Contains("-"))
-            //    {
-            //        args
-            //    }
-            //}
-
-            foreach (string arg in args)
+            foreach (string arg in Options)
             {
                 switch(arg.Substring(0, 2))
                 {
@@ -61,8 +57,20 @@ namespace DotNetStratumMiner
                             Console.WriteLine("Missing port. URL should be in format like http://megahash.wemineltc.com:3333");
                             Environment.Exit(-1);
                         }
-                        Server = arg.Split(':')[0].Replace("-o", "").Replace("http://", "").Replace("tcp://", "").Trim();
-                        Port = Convert.ToInt16(arg.Split(':')[1]);
+
+                        Server = arg.Replace("stratum+", "").Replace("http://", "").Replace("tcp://", "").Split(':')[0].Replace("-o", "").Trim();
+
+                        string PortNum = "";
+                        try
+                        {
+                            PortNum = arg.Replace("http://", "").Replace("tcp://", "").Split(':')[1];
+                            Port = Convert.ToInt16(PortNum);
+                        }
+                        catch
+                        {
+                            Console.WriteLine("Illegal port {0}", PortNum);
+                            Environment.Exit(-1);
+                        }
                     break;
                     
                     case "-u":

@@ -4,6 +4,9 @@ using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Security.Cryptography;
 using System.Text;
+using System.Collections.Specialized;
+using System.Text.RegularExpressions;
+
 
 namespace DotNetStratumMiner
 {
@@ -173,3 +176,4 @@ namespace DotNetStratumMiner
         }
     }
 }
+
