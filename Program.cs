@@ -20,10 +20,10 @@ namespace DotNetStratumMiner
         private static BackgroundWorker worker;
         private static int SharesSubmitted = 0;
         private static int SharesAccepted = 0;
-        private static string Server = ""; // = "freedom.wemineltc.com"; //"stratum.wemineftc.com";
-        private static int Port = 0; // = 3339; //4444
-        private static string Username = ""; // = "bigred.mgpu";
-        private static string Password = ""; // = "x";
+        private static string Server = "";
+        private static int Port = 0;
+        private static string Username = "";
+        private static string Password = "";
 
         private static System.Timers.Timer KeepaliveTimer;
         
@@ -163,10 +163,6 @@ namespace DotNetStratumMiner
 
         static void CoinMinerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            // For testing
-            // int UnixTime = (int)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
-            // Debug.WriteLine("Time: " + UnixTime.ToString("x8"));
-
             // If the mining threads returned a result, submit it
             if (e.Result != null)
             {
@@ -213,15 +209,6 @@ namespace DotNetStratumMiner
                         Console.WriteLine("Share rejected. " + Response.error[1]);
                     break;
             }
-
-            //try
-            //{
-            //    stratum.ExtraNonce1 = (string)((object[])Response.result)[1];
-            //}
-            //catch
-            //{
-            //    Console.WriteLine("Unexpected Result");
-            //}
         }
 
         static void stratum_GotSetDifficulty(object sender, StratumEventArgs e)
@@ -234,8 +221,6 @@ namespace DotNetStratumMiner
 
         static void stratum_GotNotify(object sender, StratumEventArgs e)
         {
-            //Console.WriteLine("Got Notify");
-
             Job ThisJob = new Job();
             StratumCommand Command = (StratumCommand)e.MiningEventArg;
 

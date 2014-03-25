@@ -82,7 +82,6 @@ namespace DotNetStratumMiner
                     Databyte[78] = (byte)(Nonce >> 16);
                     Databyte[79] = (byte)(Nonce >> 24);
 
-                    //ScryptResult = CryptSharp.Utility.SCrypt.ComputeDerivedKey(Databyte, Databyte, 1, 1024, 1, 1, 32);
                     ScryptResult = Replicon.Cryptography.SCrypt.SCrypt.DeriveKey(Databyte, Databyte, 1024, 1, 1, 32);
 
                     Hashcount++;

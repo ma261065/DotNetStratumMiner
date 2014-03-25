@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Net.Sockets;
 using System.Runtime.Serialization;
 using System.Text;
-using System.Diagnostics;
 
 namespace DotNetStratumMiner
 {

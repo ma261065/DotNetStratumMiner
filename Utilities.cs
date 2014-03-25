@@ -164,8 +164,6 @@ namespace DotNetStratumMiner
         {
             T result = default(T);
             
-            //json = "{\"error\": [-2, \"Job '7234' not found\", null], \"id\": 3, \"result\": null}";
-
             // Load json into memorystream and deserialize            
             MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(json));
 
