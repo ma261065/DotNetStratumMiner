@@ -34,7 +34,7 @@ namespace DotNetStratumMiner
 
         static void Main(string[] args)
         {
-            string CommandOptions = Environment.CommandLine.Remove(0, Environment.CommandLine.IndexOf(".exe\" ") + 6);
+            string CommandOptions = Environment.CommandLine.Remove(0, Environment.CommandLine.IndexOf(".exe") + 4).Replace("\"", "").Trim();
             CommandOptions = CommandOptions.Replace("-o ", "-o").Replace("-u ", "-u").Replace("-p ", "-p");
             string[] Options = CommandOptions.Split(' ');
 
