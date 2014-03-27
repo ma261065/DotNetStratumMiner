@@ -4,9 +4,6 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Threading;
 using System.Timers;
-using System.Net.NetworkInformation;
-using System.Text;
-using System.Collections;
 
 [assembly: AssemblyVersionAttribute("1.0.0.0")]
 namespace DotNetStratumMiner
@@ -41,7 +38,7 @@ namespace DotNetStratumMiner
 
             if (CommandOptions.Length == 0 || Options[0] == "-h")
             {
-                Console.WriteLine("-o URL         URL of mining server (e.g. http://megahash.wemineltc.com:3333)");
+                Console.WriteLine("-o URL         URL of mining server (e.g. tcp://megahash.wemineltc.com:3333)");
                 Console.WriteLine("-u USERNAME    Username for mining server");
                 Console.WriteLine("-p PASSWORD    Password for mining server");
                 Console.WriteLine("-h             Display this help text and exit");
@@ -55,7 +52,7 @@ namespace DotNetStratumMiner
                     case "-o":
                         if (!arg.Contains(":"))
                         {
-                            Console.WriteLine("Missing server port. URL should be in the format of http://megahash.wemineltc.com:3333");
+                            Console.WriteLine("Missing server port. URL should be in the format of tcp://megahash.wemineltc.com:3333");
                             Environment.Exit(-1);
                         }
 
@@ -94,12 +91,12 @@ namespace DotNetStratumMiner
 
             if (Server == "")
             {
-                Console.WriteLine("Missing server URL. URL should be in the format of http://megahash.wemineltc.com:3333");
+                Console.WriteLine("Missing server URL. URL should be in the format of tcp://megahash.wemineltc.com:3333");
                 Environment.Exit(-1);
             }
             else if (Port == 0)
             {
-                Console.WriteLine("Missing server port. URL should be in the format of http://megahash.wemineltc.com:3333");
+                Console.WriteLine("Missing server port. URL should be in the format of tcp://megahash.wemineltc.com:3333");
                 Environment.Exit(-1);
             }
             else if (Username == "")

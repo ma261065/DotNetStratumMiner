@@ -101,8 +101,12 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bin\Debug\DotNetStratumMiner.exe" />
-    <Content Include="bin\Debug\Replicon.Cryptography.SCrypt.dll" />
+    <Content Include="bin\Debug\DotNetStratumMiner.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="bin\Debug\Replicon.Cryptography.SCrypt.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

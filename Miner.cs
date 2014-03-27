@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel;
-using System.Threading;
 using System.Diagnostics;
+using System.Threading;
 
 namespace DotNetStratumMiner
 {
