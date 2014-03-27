@@ -21,6 +21,7 @@ namespace DotNetStratumMiner
         public void Mine(object sender, DoWorkEventArgs e)
         {
             Debug.WriteLine("New Miner. ID = " + Thread.CurrentThread.ManagedThreadId);
+            Console.WriteLine("Starting {0} threads for new block...", threads.Length);
 
             Job ThisJob = (Job)e.Argument;
             

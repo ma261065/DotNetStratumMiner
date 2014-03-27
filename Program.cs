@@ -26,6 +26,7 @@ namespace DotNetStratumMiner
         
         private static void OnTimedEvent(object source, ElapsedEventArgs e)
         {
+            Console.Write("Keepalive - ");
             stratum.SendAUTHORIZE();
         }
 
@@ -248,7 +249,8 @@ namespace DotNetStratumMiner
             // Cancel the existing mining threads and clear the queue if CleanJobs = true
             if (ThisJob.CleanJobs)
             {
-                Console.WriteLine("Stratum detected a new block");
+                Console.WriteLine("Stratum detected a new block. Stopping old threads.");
+
                 IncomingJobs.Clear();
                 CoinMiner.done = true;
             }
