@@ -101,9 +101,7 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bin\Debug\DotNetStratumMiner.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="bin\Debug\DotNetStratumMiner.exe" />
     <Content Include="bin\Debug\Replicon.Cryptography.SCrypt.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
