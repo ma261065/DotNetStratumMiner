@@ -34,8 +34,9 @@ namespace DotNetStratumMiner
         {
             string ExecutableName = System.Environment.GetCommandLineArgs()[0];
             string CommandOptions = Environment.CommandLine.Replace(ExecutableName, "").Replace("\"", "").Trim();
-            CommandOptions = CommandOptions.Replace("-o ", "-o").Replace("-u ", "-u").Replace("-p ", "-p");
+            CommandOptions = CommandOptions.Replace("-o ", "-o").Replace("-u ", "-u").Replace("-p ", "-p").Replace("-t ", "-t");
             string[] Options = CommandOptions.Split(' ');
+            int? threads = null;
 
             if (CommandOptions.Length == 0 || Options[0] == "-h")
             {
@@ -43,6 +44,7 @@ namespace DotNetStratumMiner
                 Console.WriteLine("-u USERNAME    Username for mining server");
                 Console.WriteLine("-p PASSWORD    Password for mining server");
                 Console.WriteLine("-h             Display this help text and exit");
+                Console.WriteLine("-t             Threads");
                 Environment.Exit(-1);
             }
 
@@ -81,8 +83,12 @@ namespace DotNetStratumMiner
                     break;
 
                     case "-h":
-                    break;
-                    
+                        break;
+
+                    case "-t":
+                        threads = Convert.ToInt32(arg.Replace("-t", "").Trim());
+                        break;
+
                     default:
                         Console.WriteLine("Illegal argument {0}", arg);
                         Environment.Exit(-1);
@@ -114,7 +120,7 @@ namespace DotNetStratumMiner
             Console.WriteLine("Connecting to '{0}' on port '{1}' with username '{2}' and password '{3}'", Server, Port, Username, Password);
             Console.WriteLine();
 
-            CoinMiner = new Miner();
+            CoinMiner = new Miner(threads);
             stratum = new Stratum();
 
             // Workaround for pools that keep disconnecting if no work is submitted in a certain time period. Send regular mining.authorize commands to keep the connection open
