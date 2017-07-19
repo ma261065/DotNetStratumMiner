@@ -226,7 +226,7 @@ namespace DotNetStratumMiner
         static void stratum_GotSetDifficulty(object sender, StratumEventArgs e)
         {
             StratumCommand Command = (StratumCommand)e.MiningEventArg;
-            CurrentDifficulty = (int)Command.parameters[0];
+            CurrentDifficulty = Convert.ToInt32(Command.parameters[0]);
 
             Console.WriteLine("Got Set_Difficulty " + CurrentDifficulty);
         }
