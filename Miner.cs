@@ -13,9 +13,13 @@ namespace DotNetStratumMiner
            
         Thread[] threads;
 
-        public Miner()
+        public Miner(int? optThreadCount = null)
         {
-            threads = new Thread[Environment.ProcessorCount];
+            int threadCount = optThreadCount ?? Environment.ProcessorCount;
+            if (threadCount > Environment.ProcessorCount) {
+                threadCount = Environment.ProcessorCount;
+            }
+            threads = new Thread[threadCount];
         }
        
         public void Mine(object sender, DoWorkEventArgs e)
